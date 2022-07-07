@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const { MongoClient } = require("mongodb");
-var ObjectId = require('mongodb').ObjectID;
+var ObjectID = require('mongodb').ObjectID;
 
 const uri = process.env.MONGODB_URI;
 const db = "babcoin";
