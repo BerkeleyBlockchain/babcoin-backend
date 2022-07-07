@@ -1,0 +1,29 @@
+[
+  {
+    "date": "2022-09-01",
+    "start_time": "17:00",
+    "end_time": "19:30",
+    "name": "Consensus",
+    "password": "Big Tim",
+    "image_url": "https://ipfs.io",
+    "qrcode_url": "http://example.com/"
+  },
+  {
+    "date": "2022-10-01",
+    "start_time": "18:00",
+    "end_time": "20:45",
+    "name": "Consulting All Hands",
+    "password": "Sishir",
+    "image_url": "https://ipfs.io",
+    "qrcode_url": "http://example.com/"
+  },
+  {
+    "date": "2022-11-02",
+    "start_time": "19:11",
+    "end_time": "21:45",
+    "name": "B@B Concert",
+    "password": "Ratan",
+    "image_url": "https://ipfs.io",
+    "qrcode_url": "http://example.com/"
+  }
+]

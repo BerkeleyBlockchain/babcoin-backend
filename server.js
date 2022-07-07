@@ -1,20 +1,44 @@
-// create an express app
 const express = require("express");
 const app = express();
-
 const { MongoClient } = require("mongodb");
+var ObjectId = require('mongodb').ObjectID;
 
-//const uri = "mongodb+srv://USERNAME:PASSWORD@CLUSTER_NAME.mongodb.net/DATABASE_NAME?retryWrites=true&w=majority";
 const uri = process.env.MONGODB_URI;
-
+const db = "babcoin";
+const collection_users = "users";
+const collection_events = "events";
 console.log("Server Deployed!");
-console.log(uri);
 
 // use the express-static middleware
 app.use(express.static("public"));
 
-// define the first route
-app.get("/api/movie", async function (req, res) {
+// B@B User API
+app.get("/v1/user/:id", async function (req, res) {
+  const client = new MongoClient(uri, { useUnifiedTopology: true });
+  
+  try {
+    await client.connect();
+
+    const database = client.db(db);
+    const users = database.collection(collection_users);
+    var o_id = new ObjectID(id);
+    users.findOne({_id:o_id})
+    .exec(function(err,data){
+      if (err){
+        console.log(err);
+      } else {
+        return res.json(data);
+      }
+    })
+  } catch(err) {
+    console.log(err);
+  }
+  finally {
+    await client.close();
+  }
+});
+
+app.get("/v1/event/:id", async function (req, res) {
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   
   try {
@@ -22,21 +46,6 @@ app.get("/api/movie", async function (req, res) {
 
     const database = client.db('sample_mflix');
     const collection = database.collection('movies');
-
-    // Query for a movie that has the title 'Back to the Future'
-    const query = { genres: "Comedy", poster: { $exists: true } };
-    const cursor = await collection.aggregate([
-      { $match: query },
-      { $sample: { size: 1 } },
-      { $project: 
-        {
-          title: 1,
-          fullplot: 1,
-          poster: 1
-        }
-      }
-    ]);
-
     const movie = await cursor.next();
 
     return res.json(movie);
@@ -44,7 +53,6 @@ app.get("/api/movie", async function (req, res) {
     console.log(err);
   }
   finally {
-    // Ensures that the client will close when you finish/error
     await client.close();
   }
 });
