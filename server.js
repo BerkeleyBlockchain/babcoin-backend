@@ -19,16 +19,8 @@ app.get("/v1/users", async function (req, res) {
   try {
     await client.connect();
     const database = client.db(db);
-    const users = database.collection(collection_users);
-    var o_id = new ObjectID(req.params.id);
-    users.find()
-    .then(function(doc) {
-      console.log("returned");
-      if(!doc)
-        throw new Error('No record found.');
-      console.log(doc);
-      return res.json(doc);
-    });
+    const users = database.collection(collection_users).find().toArray();
+    return res.json(users);
   } catch(err) {
     console.log(err);
   }
