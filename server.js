@@ -13,6 +13,30 @@ console.log("Server Deployed!");
 app.use(express.static("public"));
 
 // B@B User API
+// B@B User API
+app.get("/v1/users", async function (req, res) {
+  const client = new MongoClient(uri, { useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db(db);
+    const users = database.collection(collection_users);
+    var o_id = new ObjectID(req.params.id);
+    users.find()
+    .then(function(doc) {
+      console.log("returned");
+      if(!doc)
+        throw new Error('No record found.');
+      console.log(doc);
+      return res.json(doc);
+    });
+  } catch(err) {
+    console.log(err);
+  }
+  finally {
+    await client.close();
+  }
+});
+
 app.get("/v1/user/:id", async function (req, res) {
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   
