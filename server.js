@@ -21,7 +21,7 @@ app.get("/v1/user/:id", async function (req, res) {
 
     const database = client.db(db);
     const users = database.collection(collection_users);
-    var o_id = new ObjectID(id);
+    var o_id = new ObjectID(req.params.id);
     users.findOne({_id:o_id})
     .exec(function(err,data){
       if (err){
