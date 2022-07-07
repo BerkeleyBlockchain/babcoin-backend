@@ -22,14 +22,13 @@ app.get("/v1/user/:id", async function (req, res) {
     const database = client.db(db);
     const users = database.collection(collection_users);
     var o_id = new ObjectID(req.params.id);
-    users.findOne({_id:o_id})
-    .exec(function(err,data){
-      if (err){
-        console.log(err);
-      } else {
-        return res.json(data);
-      }
-    })
+    users.findOne({'_id':o_id})
+    .then(function(doc) {
+      if(!doc)
+        throw new Error('No record found.');
+      console.log(doc);
+      return res.json(doc);
+    });
   } catch(err) {
     console.log(err);
   }
