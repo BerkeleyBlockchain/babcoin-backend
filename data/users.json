@@ -1,17 +1,26 @@
 [
   {
+    "_id": 1,
     "first_name": "Alice",
     "last_name": "Cooper",
-    "wallet_address": "0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6"
+    "email": "alice@berkeley.edu",
+    "wallet_address": "0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6",
+    "role": "admin"
   },
   {
+    "_id": 2,
     "first_name": "Bob",
     "last_name": "Smith",
-    "wallet_address": "0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6"
+    "email": "alice@berkeley.edu",
+    "wallet_address": "0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6",
+    "role": "normal"
   },
   {
+    "_id": 3,
     "first_name": "Carol",
     "last_name": "Hannah",
-    "wallet_address": "0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6"
+    "email": "alice@berkeley.edu",
+    "wallet_address": "0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6",
+    "role": "normal"
   }
 ]

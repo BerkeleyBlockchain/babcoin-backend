@@ -13,7 +13,6 @@ console.log("Server Deployed!");
 app.use(express.static("public"));
 
 // B@B User API
-// B@B User API
 app.get("/v1/users", async function (req, res) {
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   try {
@@ -53,6 +52,23 @@ app.get("/v1/user/:id", async function (req, res) {
   }
 });
 
+// Get all events a user has gone to
+app.get("/v1/userevents/:id", async function (req, res) {
+  const client = new MongoClient(uri, { useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db(db);
+    const users = database.collection(collection_users).find().toArray();
+    return res.json(users);
+  } catch(err) {
+    console.log(err);
+  }
+  finally {
+    await client.close();
+  }
+});
+
+// Get specific event object
 app.get("/v1/event/:id", async function (req, res) {
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   
@@ -64,6 +80,70 @@ app.get("/v1/event/:id", async function (req, res) {
     const movie = await cursor.next();
 
     return res.json(movie);
+  } catch(err) {
+    console.log(err);
+  }
+  finally {
+    await client.close();
+  }
+});
+
+// Get subset of event object for nft metadata
+app.get("/v1/nft/:id", async function (req, res) {
+  const client = new MongoClient(uri, { useUnifiedTopology: true });
+  
+  try {
+    await client.connect();
+
+    const database = client.db('sample_mflix');
+    const collection = database.collection('movies');
+    const movie = await cursor.next();
+
+    return res.json(movie);
+  } catch(err) {
+    console.log(err);
+  }
+  finally {
+    await client.close();
+  }
+});
+
+// Get all events
+app.get("/v1/events", async function (req, res) {
+  const client = new MongoClient(uri, { useUnifiedTopology: true });
+  try {
+    await client.connect();
+    const database = client.db(db);
+    const events = database.collection(collection_users).find().toArray();
+    return res.json(events);
+  } catch(err) {
+    console.log(err);
+  }
+  finally {
+    await client.close();
+  }
+});
+
+// Create a user
+app.post("/v1/user", async function (req, res) {
+  try {
+    await client.connect();
+    // Proper return
+    return res.json({});
+  } catch(err) {
+    console.log(err);
+  }
+  finally {
+    await client.close();
+  }
+});
+
+// Create an event
+app.post("/v1/event", async function (req, res) {
+  try {
+    await client.connect();
+    // Proper return
+    return res.json({});
   } catch(err) {
     console.log(err);
   }

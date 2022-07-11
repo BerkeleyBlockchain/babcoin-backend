@@ -1,27 +1,30 @@
 [
   {
-    "date": "2022-09-01",
-    "start_time": "17:00",
-    "end_time": "19:30",
+    "_id": 1,
+    "start_timestamp": 1657562965,
+    "end_timestamp": 1657562965,
     "name": "Consensus",
+    "type": "Mandatory",
     "password": "Big Tim",
     "image_url": "https://ipfs.io",
     "qrcode_url": "http://example.com/"
   },
   {
-    "date": "2022-10-01",
-    "start_time": "18:00",
-    "end_time": "20:45",
+    "_id": 2,
+    "start_timestamp": 1657562965,
+    "end_timestamp": 1657562965,
     "name": "Consulting All Hands",
+    "type": "Consulting",
     "password": "Sishir",
     "image_url": "https://ipfs.io",
     "qrcode_url": "http://example.com/"
   },
   {
-    "date": "2022-11-02",
-    "start_time": "19:11",
-    "end_time": "21:45",
+    "_id": 3,
+    "start_timestamp": 1657562965,
+    "end_timestamp": 1657562965,
     "name": "B@B Concert",
+    "type": "Social",
     "password": "Ratan",
     "image_url": "https://ipfs.io",
     "qrcode_url": "http://example.com/"
