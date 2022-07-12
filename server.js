@@ -14,14 +14,13 @@ app.use(express.static("public"));
 
 // B@B User API
 app.get("/v1/users", async function (req, res) {
+  const client = await MongoClient.connect(uri, { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+  });
   try {
-    const client = await MongoClient.connect(uri, { 
-      useNewUrlParser: true, 
-      useUnifiedTopology: true,
-    });
     const db = client.db(db);
     const users = await db.collection(collection_users).find({}).toArray();
-  
     return res.json(users);
   } catch(err) {
     console.log(err);
