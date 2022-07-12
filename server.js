@@ -4,7 +4,7 @@ const { MongoClient } = require("mongodb");
 var ObjectID = require('mongodb').ObjectID;
 
 const uri = process.env.MONGODB_URI;
-const db = "babcoin";
+const babcoin_db = "babcoin";
 const collection_users = "users";
 const collection_events = "events";
 console.log("Server Deployed!");
@@ -19,7 +19,7 @@ app.get("/v1/users", async function (req, res) {
     useUnifiedTopology: true,
   });
   try {
-    const db = client.db(db);
+    const db = client.db(babcoin_db);
     const users = await db.collection(collection_users).find({}).toArray();
     return res.json(users);
   } catch(err) {
