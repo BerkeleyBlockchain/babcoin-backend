@@ -159,11 +159,11 @@ app.post("/v1/user", async function (req, res) {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
   });
-  const f_name = req.params.first_name;
-  const l_name = req.params.last_name;
-  const u_email = req.params.email;
-  const u_wallet_address = req.params.wallet_address;
-  const u_role = req.params.role;
+  const f_name = req.body.first_name;
+  const l_name = req.body.last_name;
+  const u_email = req.body.email;
+  const u_wallet_address = req.body.wallet_address;
+  const u_role = req.body.role;
   
   if(!f_name) {
     return res.json({message: "Missing Required param first_name!"});
@@ -205,13 +205,13 @@ app.post("/v1/event", async function (req, res) {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
   });
-  const start_ts = req.params.start_timestamp;
-  const end_ts = req.params.end_timestamp;
-  const e_name = req.params.name;
-  const e_type = req.params.type;
-  const e_role = req.params.role;
-  const e_image_url = req.params.image_url;
-  const e_qrcode_url = req.params.qrcode_url;
+  const start_ts = req.body.start_timestamp;
+  const end_ts = req.body.end_timestamp;
+  const e_name = req.body.name;
+  const e_type = req.body.type;
+  const e_role = req.body.role;
+  const e_image_url = req.body.image_url;
+  const e_qrcode_url = req.body.qrcode_url;
   
   if(!start_ts) {
     return res.json({message: "Missing Required param start_timestamp!"});
@@ -252,6 +252,37 @@ app.post("/v1/event", async function (req, res) {
   }
 });
 
+// Create an event
+app.post("/v1/userevent", async function (req, res) {
+  const client = await MongoClient.connect(uri, { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true,
+  });
+  const e_id = req.body.event_id;
+  const u_id = req.body.user_id;
+  
+  if(!e_id) {
+    return res.json({message: "Missing Required param event_id!"});
+  }
+  if(!u_id) {
+    return res.json({message: "Missing Required param user_id!"});
+  }
+  var usereventObj = { event_id: e_id, user_id: u_id };
+  try {
+    const db = client.db(babcoin_db);
+    const userevents = db.collection(collection_userevents);
+    userevents.insertOne(usereventObj, function(err, res) {
+      if (err) throw err;
+      return res.json(res);
+    });
+  } catch(err) {
+    console.log(err);
+    return res.json(err);
+  }
+  finally {
+    await client.close();
+  }
+});
 // start the server listening for requests
 app.listen(process.env.PORT || 3000, 
 	() => console.log("Server is running..."));
