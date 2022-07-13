@@ -90,18 +90,16 @@ app.get("/v1/user/:id", async function (req, res) {
         client = mongoose.connect(uri_local, { useNewUrlParser: true, useUnifiedTopology: true })
 
         // db = client.db(babcoin_db);
-
-        const users = client.collection(collection_users);
     
     
         async function getNextSequenceValue() {
             console.log('running...');
-            var max_doc_id = await users.findOne({$query:{},$orderby:{_id:-1}});
-            console.log('max doc: ' + max_doc_id)
-            if (!max_doc_id) {
+            var max_doc = await User.findOne({$query:{},$orderby:{_id:-1}});
+            console.log('max doc: ' + max_doc._id)
+            if (!max_doc._id) {
                 return 1;
             }
-            return max_doc_id + 1;
+            return max_doc._id + 1;
           }
     
         const conSuccess = mongoose.connection;
