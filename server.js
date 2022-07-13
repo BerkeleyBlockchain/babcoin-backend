@@ -43,7 +43,7 @@ app.get("/v1/user/:id", async function (req, res) {
   try {
     const db = client.db(babcoin_db);  
     const users = db.collection(collection_users);
-    var o_id = new ObjectID(req.params.id);
+    var o_id = req.params.id;
     users.findOne({'_id':o_id})
     .then(function(doc) {
       if(!doc)
@@ -68,7 +68,7 @@ app.get("/v1/userevents/:id", async function (req, res) {
   });
   try {
     const db = client.db(babcoin_db);
-    var o_id = new ObjectID(req.params.id);
+    var o_id = req.params.id;
     const userevents = db.collection(collection_userevents).find().toArray();
     userevents.find({'user_id':o_id}).then(function(doc) {
       if(!doc)
@@ -94,7 +94,7 @@ app.get("/v1/event/:id", async function (req, res) {
   try {
     const db = client.db(babcoin_db);
     const events = db.collection(collection_events);
-    var o_id = new ObjectID(req.params.id);
+    var o_id = req.params.id;
     events.find({'user_id':o_id}).then(function(doc) {
       if(!doc)
         throw new Error('No record found.');
@@ -119,7 +119,7 @@ app.get("/v1/nft/:id", async function (req, res) {
   try {
     const db = client.db(babcoin_db);
     const events = db.collection(collection_events);
-    var o_id = new ObjectID(req.params.id);
+    var o_id = req.params.id;
     events.find({'user_id':o_id}).then(function(doc) {
       if(!doc)
         throw new Error('No record found.');
@@ -164,7 +164,7 @@ app.post("/v1/user", async function (req, res) {
   const u_email = req.body.email;
   const u_wallet_address = req.body.wallet_address;
   const u_role = req.body.role;
-  
+
   if(!f_name) {
     return res.json({message: "Missing Required param first_name!"});
   }
