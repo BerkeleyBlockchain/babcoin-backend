@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { MongoClient } = require("mongodb");
 var ObjectID = require('mongodb').ObjectID;
+var mongoose = require('mongoose');
 
 const uri = process.env.MONGODB_URI;
 const babcoin_db = "babcoin";
@@ -159,27 +160,34 @@ app.post("/v1/user", async function (req, res) {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
   });
-  const f_name = req.body.first_name;
-  const l_name = req.body.last_name;
-  const u_email = req.body.email;
-  const u_wallet_address = req.body.wallet_address;
-  const u_role = req.body.role;
+  var user = new User ({
+    f_name: req.body.first_name,
+    l_name:  req.body.last_name,
+    u_email: req.body.email,
+    u_wallet_address: req.body.wallet_address,
+    u_role: req.body.role,
+  });
 
-  if(!f_name) {
-    return res.json({message: "Missing Required param first_name!"});
-  }
-  if(!l_name) {
-    return res.json({message: "Missing Required param last_name!"});
-  }
-  if(!u_email) {
-    return res.json({message: "Missing Required param email!"});
-  }
-  if(!u_wallet_address) {
-    return res.json({message: "Missing Required param wallet_address!"});
-  }
-  if(!u_role) {
-    return res.json({message: "Missing Required param role!"});
-  }
+  small.save(function (err) {
+    if (err) return handleError(err);
+    // saved!
+  });
+
+  // if(!f_name) {
+  //   return res.json({message: "Missing Required param first_name!"});
+  // }
+  // if(!l_name) {
+  //   return res.json({message: "Missing Required param last_name!"});
+  // }
+  // if(!u_email) {
+  //   return res.json({message: "Missing Required param email!"});
+  // }
+  // if(!u_wallet_address) {
+  //   return res.json({message: "Missing Required param wallet_address!"});
+  // }
+  // if(!u_role) {
+  //   return res.json({message: "Missing Required param role!"});
+  // }
   var userObj = { first_name: f_name, last_name: l_name, email: u_email, wallet_address: u_wallet_address, role: u_role };
 
   try {
