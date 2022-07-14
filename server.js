@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const { MongoClient } = require("mongodb");
+var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const User = require('./user.model');
 const consts = require('./consts');
@@ -8,6 +9,9 @@ const consts = require('./consts');
 console.log("Server running " + consts.uri);
 // use the express-static middleware
 app.use(express.static("public"));
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded())
 
 //// Users
 // B@B Users API
