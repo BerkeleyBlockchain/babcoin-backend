@@ -203,7 +203,7 @@ app.post("/v1/user", async function (req, res) {
     return res.json(err);
   }
   finally {
-  //   await client.close();
+    await mongoose.connection.close();
   }
 });
 
