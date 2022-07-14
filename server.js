@@ -1,15 +1,12 @@
 const express = require("express");
 const app = express();
 const { MongoClient } = require("mongodb");
-var ObjectID = require('mongodb').ObjectID;
-var mongoose = require('mongoose');
-
-const uri = process.env.MONGODB_URI;
+const mongoose = require('mongoose');
+const User = require('./user.model');
 const babcoin_db = "babcoin";
-const collection_users = "users";
-const collection_events = "events";
-const collection_userevents = "userevents";
+const uri = process.env.MONGODB_URI + "/" + babcoin_db;
 
+console.log("Server running " + uri);
 // use the express-static middleware
 app.use(express.static("public"));
 
@@ -154,56 +151,56 @@ app.get("/v1/events", async function (req, res) {
   }
 });
 
+async function getNextSequenceValue(schema) {
+  console.log('running...');
+  var max_doc = await schema.findOne({$query:{},$orderby:{_id:-1}});
+  console.log('max doc: ' + max_doc._id)
+  if (!max_doc._id) {
+      return 1;
+  }
+  return max_doc._id + 1;
+}
+
 // Create a user
 app.post("/v1/user", async function (req, res) {
-  const client = await MongoClient.connect(uri, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-  });
-  var user = new User ({
-    f_name: req.body.first_name,
-    l_name:  req.body.last_name,
-    u_email: req.body.email,
-    u_wallet_address: req.body.wallet_address,
-    u_role: req.body.role,
-  });
-
-  small.save(function (err) {
-    if (err) return handleError(err);
-    // saved!
-  });
-
-  // if(!f_name) {
-  //   return res.json({message: "Missing Required param first_name!"});
-  // }
-  // if(!l_name) {
-  //   return res.json({message: "Missing Required param last_name!"});
-  // }
-  // if(!u_email) {
-  //   return res.json({message: "Missing Required param email!"});
-  // }
-  // if(!u_wallet_address) {
-  //   return res.json({message: "Missing Required param wallet_address!"});
-  // }
-  // if(!u_role) {
-  //   return res.json({message: "Missing Required param role!"});
-  // }
-  var userObj = { first_name: f_name, last_name: l_name, email: u_email, wallet_address: u_wallet_address, role: u_role };
-
+  console.log('/v1/user 1');
+  let client;
   try {
-    const db = client.db(babcoin_db);
-    const users = db.collection(collection_users);
-    users.insertOne(userObj, function(err, res) {
-      if (err) throw err;
-      return res.json(res);
+      client = mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+      console.log('/v1/user 2');
+
+      const conSuccess = mongoose.connection;
+      conSuccess.once('open', async function (_) {
+        console.log('Database connected')
+        var new_id = await getNextSequenceValue(User);
+        console.log('new_id ' + new_id);
+
+        var new_user = new User({
+          _id: new_id,
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          email: req.body.email,
+          wallet_address: req.body.wallet_address,
+          role: req.body.role,
+        });
+        console.log('new_user');
+        console.log(JSON.stringify(new_user));
+        await new_user.save(function (err, user) {
+          if (err){
+            console.log('new user save error');
+            console.error(err);
+            return res.json(err);
+          } 
+          return res.json(user);
+        });
     });
   } catch(err) {
+    console.log('new user catch error');
     console.log(err);
     return res.json(err);
   }
   finally {
-    await db.close();
-    await client.close();
+  //   await client.close();
   }
 });
 
