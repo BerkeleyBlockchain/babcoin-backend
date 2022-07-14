@@ -3,10 +3,9 @@ const app = express();
 const { MongoClient } = require("mongodb");
 const mongoose = require('mongoose');
 const User = require('./user.model');
-const babcoin_db = "babcoin";
-const uri = process.env.MONGODB_URI + "/" + babcoin_db;
+const consts = require('./consts');
 
-console.log("Server running " + uri);
+console.log("Server running " + consts.uri);
 // use the express-static middleware
 app.use(express.static("public"));
 
@@ -166,7 +165,7 @@ app.post("/v1/user", async function (req, res) {
   console.log('/v1/user 1');
   let client;
   try {
-      client = mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+      client = mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
       console.log('/v1/user 2');
 
       const conSuccess = mongoose.connection;

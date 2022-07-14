@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
- 
-const connection = mongoose.createConnection('mongodb://localhost:27017/babcoin');
+const consts = require('./consts');
+
+const connection = mongoose.createConnection(consts.uri);
 var Schema  = mongoose.Schema;
 
 const userSchema = new Schema ({
