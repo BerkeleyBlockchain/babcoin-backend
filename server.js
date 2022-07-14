@@ -3,7 +3,10 @@ const app = express();
 const { MongoClient } = require("mongodb");
 var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-const User = require('./user.model');
+const Users = require('./users.model');
+const Events = require('./events.model');
+const Userevents = require('./userevents.model');
+
 const consts = require('./consts');
 
 console.log("Server running " + consts.uri);
@@ -155,40 +158,29 @@ app.get("/v1/events", async function (req, res) {
 });
 
 async function getNextSequenceValue(schema) {
-  console.log('running...');
   var max_doc = await schema.findOne().sort('-_id');
-  //var max_doc = await schema.find({$query:{},$orderby:{_id:-1}});
   if (!max_doc || !max_doc._id) {
       return 1;
   }
-  console.log('max doc: ' + JSON.stringify(max_doc));
   return max_doc._id + 1;
 }
 
 // Create a user
 app.post("/v1/user", async function (req, res) {
-  console.log('/v1/user 1');
-  let client;
   try {
-      client = mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
-      console.log('/v1/user 2');
+      mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
       const conSuccess = mongoose.connection;
       conSuccess.once('open', async function (_) {
-        console.log('Database connected')
         var new_id = await getNextSequenceValue(User);
-        console.log('new_id ' + new_id);
-
-        var new_user = new User({
+        var new_user = new Users({
           _id: new_id,
           first_name: req.body.first_name,
           last_name: req.body.last_name,
           email: req.body.email,
           wallet_address: req.body.wallet_address,
-          role: req.body.role,
+          role: req.body.role
         });
-        console.log('new_user');
-        console.log(JSON.stringify(new_user));
         await new_user.save(function (err, user) {
           if (err){
             console.log('new user save error');
@@ -210,86 +202,68 @@ app.post("/v1/user", async function (req, res) {
 
 // Create an event
 app.post("/v1/event", async function (req, res) {
-  const client = await MongoClient.connect(uri, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-  });
-  const start_ts = req.body.start_timestamp;
-  const end_ts = req.body.end_timestamp;
-  const e_name = req.body.name;
-  const e_type = req.body.type;
-  const e_role = req.body.role;
-  const e_image_url = req.body.image_url;
-  const e_qrcode_url = req.body.qrcode_url;
-  
-  if(!start_ts) {
-    return res.json({message: "Missing Required param start_timestamp!"});
-  }
-  if(!end_ts) {
-    return res.json({message: "Missing Required param end_timestamp!"});
-  }
-  if(!e_name) {
-    return res.json({message: "Missing Required param name!"});
-  }
-  if(!e_type) {
-    return res.json({message: "Missing Required param type!"});
-  }
-  if(!e_role) {
-    return res.json({message: "Missing Required param role!"});
-  }
-  if(!e_image_url) {
-    return res.json({message: "Missing Required param image_url!"});
-  }
-  if(!e_qrcode_url) {
-    return res.json({message: "Missing Required param qrcode_url!"});
-  }
-  var eventObj = { start_timestamp: start_ts, end_timestamp: end_ts, name: e_name, type: e_type, role: e_role, image_url: e_image_url, qrcode_url: e_qrcode_url };
-
   try {
-    const db = client.db(babcoin_db);
-    const events = db.collection(collection_events);
-    events.insertOne(eventObj, function(err, res) {
-      if (err) throw err;
-      return res.json(res);
+      mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
+      const conSuccess = mongoose.connection;
+      conSuccess.once('open', async function (_) {
+        var new_id = await getNextSequenceValue(Events);
+        var new_event = new Events({
+          _id: new_id,
+          start_timestamp: req.body.start_timestamp,
+          end_timestamp: req.body.end_timestamp,
+          name: req.body.name,
+          type: req.body.type,
+          role: req.body.role,
+          image_url: req.body.image_url,
+          qrcode_url: req.body.qrcode_url
+        });
+        await new_event.save(function (err, event) {
+          if (err){
+            console.log('new event save error');
+            console.error(err);
+            return res.json(err);
+          } 
+          return res.json(event);
+        });
     });
   } catch(err) {
+    console.log('new event catch error');
     console.log(err);
     return res.json(err);
   }
   finally {
-    await client.close();
+    await mongoose.connection.close();
   }
 });
 
-// Create an event
+// Create an userevent
 app.post("/v1/userevent", async function (req, res) {
-  const client = await MongoClient.connect(uri, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-  });
-  const e_id = req.body.event_id;
-  const u_id = req.body.user_id;
-  
-  if(!e_id) {
-    return res.json({message: "Missing Required param event_id!"});
-  }
-  if(!u_id) {
-    return res.json({message: "Missing Required param user_id!"});
-  }
-  var usereventObj = { event_id: e_id, user_id: u_id };
   try {
-    const db = client.db(babcoin_db);
-    const userevents = db.collection(collection_userevents);
-    userevents.insertOne(usereventObj, function(err, res) {
-      if (err) throw err;
-      return res.json(res);
+    mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const conSuccess = mongoose.connection;
+    conSuccess.once('open', async function (_) {
+      var new_id = await getNextSequenceValue(Events);
+      var new_userevent = new Userevents({
+        _id: new_id,
+        event_id: req.body.event_id,
+        user_id: req.body.user_id
+      });
+      await new_userevent.save(function (err, event) {
+        if (err){
+          console.log('new event save error');
+          console.error(err);
+          return res.json(err);
+        } 
+        return res.json(event);
+      });
     });
   } catch(err) {
+    console.log('new event catch error');
     console.log(err);
     return res.json(err);
   }
   finally {
-    await client.close();
+    await mongoose.connection.close();
   }
 });
 // start the server listening for requests
