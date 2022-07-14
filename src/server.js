@@ -31,8 +31,8 @@ app.use(
   })
 );
 
-app.use("/v2/user/", userRouter);
-app.use("/v2/event/", eventRouter);
+app.use("/v1/user/", userRouter);
+app.use("/v1/event/", eventRouter);
 
 // Get all events a user has gone to
 // app.get("/v1/userevents/:id", async function (req, res) {
