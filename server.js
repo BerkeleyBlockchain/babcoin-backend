@@ -20,20 +20,20 @@ app.use(bodyParser.urlencoded())
 // B@B Users API
 ////
 app.get("/v1/users", async function (req, res) {
-  const client = await MongoClient.connect(uri, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-  });
   try {
-    const db = client.db(babcoin_db);
-    const users = await db.collection(collection_users).find({}).toArray();
-    return res.json(users);
+    mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const conSuccess = mongoose.connection;
+    conSuccess.once('open', async function (_) {
+      const filter = {};
+      const users = await Users.find(filter);
+      return res.json(users);
+    });
   } catch(err) {
     console.log(err);
     return res.json(err);
   }
   finally {
-    await client.close();
+    await mongoose.connection.close();
   }
 });
 //// Users
@@ -141,19 +141,20 @@ app.get("/v1/nft/:id", async function (req, res) {
 
 // Get all events
 app.get("/v1/events", async function (req, res) {
-  const client = await MongoClient.connect(uri, { 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-  });  
   try {
-    const db = client.db(babcoin_db);    
-    const events = await db.collection(collection_events).find({}).toArray();
-    return res.json(events);
+    mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const conSuccess = mongoose.connection;
+    conSuccess.once('open', async function (_) {
+      const filter = {};
+      const events = await Events.find(filter);
+      return res.json(events);
+    });
   } catch(err) {
     console.log(err);
+    return res.json(err);
   }
   finally {
-    await client.close();
+    await mongoose.connection.close();
   }
 });
 
