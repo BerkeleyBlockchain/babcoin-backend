@@ -242,19 +242,19 @@ app.post("/v1/userevent", async function (req, res) {
     mongoose.connect(consts.uri, { useNewUrlParser: true, useUnifiedTopology: true });
     const conSuccess = mongoose.connection;
     conSuccess.once('open', async function (_) {
-      var new_id = await getNextSequenceValue(Events);
+      var new_id = await getNextSequenceValue(Userevents);
       var new_userevent = new Userevents({
         _id: new_id,
         event_id: req.body.event_id,
         user_id: req.body.user_id
       });
-      await new_userevent.save(function (err, event) {
+      await new_userevent.save(function (err, userevent) {
         if (err){
           console.log('new event save error');
           console.error(err);
           return res.json(err);
         } 
-        return res.json(event);
+        return res.json(userevent);
       });
     });
   } catch(err) {
