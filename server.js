@@ -173,7 +173,7 @@ app.post("/v1/user", async function (req, res) {
 
       const conSuccess = mongoose.connection;
       conSuccess.once('open', async function (_) {
-        var new_id = await getNextSequenceValue(User);
+        var new_id = await getNextSequenceValue(Users);
         var new_user = new Users({
           _id: new_id,
           first_name: req.body.first_name,
