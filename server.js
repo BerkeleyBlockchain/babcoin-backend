@@ -153,10 +153,10 @@ app.get("/v1/events", async function (req, res) {
 async function getNextSequenceValue(schema) {
   console.log('running...');
   var max_doc = await schema.findOne({$query:{},$orderby:{_id:-1}});
-  console.log('max doc: ' + max_doc._id)
-  if (!max_doc._id) {
+  if (!max_doc) {
       return 1;
   }
+  console.log('max doc: ' + JSON.stringify(max_doc));
   return max_doc._id + 1;
 }
 
