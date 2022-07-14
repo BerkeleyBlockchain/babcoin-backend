@@ -1,28 +1,47 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
+const consts = require("../consts");
 
 var Schema = mongoose.Schema;
 
 const usersSchema = new Schema({
-  first_name: {
+  firstName: {
     type: String,
     required: true,
   },
-  last_name: {
+  lastName: {
     type: String,
-    require: true,
+    required: true,
   },
   email: {
     type: String,
-    require: true,
+    required: true,
+    unique: true,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error("Email is invalid");
+      }
+    },
   },
-  wallet_address: {
+  address: {
     type: String,
-    require: true,
+    required: true,
+    unique: true,
+    validate(value) {
+      if (!validator.isEthereumAddress(value)) {
+        throw new Error("Address is invalid");
+      }
+    },
   },
-  last_name: {
+  role: {
     type: String,
-    require: true,
+    required: true,
+    validate(value) {
+      if (!consts.roles.includes(value)) {
+        throw new Error("Role is invalid");
+      }
+    },
   },
 });
 
-module.exports = connection.model("Users", usersSchema, "users");
+module.exports = mongoose.model("User", usersSchema);

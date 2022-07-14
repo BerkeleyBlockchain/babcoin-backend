@@ -1,18 +1,15 @@
 const mongoose = require("mongoose");
-
-const connection = mongoose.createConnection(consts.uri);
 var Schema = mongoose.Schema;
 
-const usereventsSchema = new Schema({
-  _id: Number,
-  event_id: {
-    type: Number,
+const userEventsSchema = new Schema({
+  eventId: {
+    type: String,
     required: true,
   },
-  user_id: {
-    type: Number,
+  userId: {
+    type: String,
     require: true,
   },
 });
 
-module.exports = connection.model("Userevents", usereventsSchema, "userevents");
+module.exports = mongoose.model("UserEvent", userEventsSchema);

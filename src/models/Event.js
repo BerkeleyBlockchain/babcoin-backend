@@ -1,16 +1,15 @@
-var mongoose = require("mongoose");
-const consts = require("../../consts");
+const mongoose = require("mongoose");
+const consts = require("../consts");
+const validator = require("validator");
 
-const connection = mongoose.createConnection(consts.uri);
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 const eventsSchema = new Schema({
-  _id: Number,
-  start_timestamp: {
+  startTimestamp: {
     type: Number,
     required: true,
   },
-  end_timestamp: {
+  endTimestamp: {
     type: Number,
     require: true,
   },
@@ -21,19 +20,39 @@ const eventsSchema = new Schema({
   type: {
     type: String,
     require: true,
+    validate(value) {
+      if (!consts.eventTypes.includes(value)) {
+        throw new Error("Event type is invalid");
+      }
+    },
   },
   password: {
     type: String,
     require: true,
   },
-  image_url: {
+  imageUrl: {
+    type: String,
+    require: true,
+    validate(value) {
+      if (!validator.isURL(value)) {
+        throw new Error("Image URL is invalid");
+      }
+    },
+  },
+  qrCodeUrl: {
     type: String,
     require: true,
   },
-  qrcode_url: {
-    type: String,
+  weight: {
+    type: Number,
     require: true,
+    default: 1,
+  },
+  nftId: {
+    type: Number,
+    require: true,
+    unique: true,
   },
 });
 
-module.exports = connection.model("Events", eventsSchema, "events");
+module.exports = mongoose.model("Event", eventsSchema);
