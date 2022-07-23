@@ -8,9 +8,12 @@ const userRouter = require("./routes/userRouter");
 const eventRouter = require("./routes/eventRouter");
 
 const port = process.env.PORT ? process.env.PORT : 4000;
+console.log(port);
+
+const url = process.env.MONGOOSE ? process.env.MONGOOSE : "mongodb://localhost:27017/babcoin"
 console.log(process.env.MONGOOSE);
 
-mongoose.connect(process.env.MONGOOSE, {
+mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

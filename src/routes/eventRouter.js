@@ -19,18 +19,7 @@ router.get("/", async function (req, res) {
   }
 });
 
-router.get("/nft/:id", async function (req, res) {
-  const { id } = req.params;
-  try {
-    let event = await Event.findOne({ nftId: id });
-    return res.status(200).json(event);
-  } catch (err) {
-    console.log(err);
-    return res.status(200).json(err);
-  }
-});
-
-router.post("/newEvent", async function (req, res) {
+router.post("/", async function (req, res) {
   const { startTimestamp, endTimestamp, name, type, imageUrl, qrCodeUrl } =
     req.body;
 
@@ -63,6 +52,17 @@ router.post("/newEvent", async function (req, res) {
   } catch (err) {
     console.log(err);
     return res.status(400).json(err);
+  }
+});
+
+router.get("/nft/:id", async function (req, res) {
+  const { id } = req.params;
+  try {
+    let event = await Event.findOne({ nftId: id });
+    return res.status(200).json(event);
+  } catch (err) {
+    console.log(err);
+    return res.status(200).json(err);
   }
 });
 
