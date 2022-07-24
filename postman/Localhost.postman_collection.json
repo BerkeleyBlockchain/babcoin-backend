@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "0b38a2bb-b1d7-494a-8148-9b0da108d6ee",
+		"name": "Localhost",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "553666"
+	},
+	"item": [
+		{
+			"name": "get users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/user?address=0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"user"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB6"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "make a user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Lawson3\",\n    \"lastName\": \"Graham2\",\n    \"email\": \"test2@test.com\",\n    \"address\": \"0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB6\",\n    \"role\": \"admin\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get events",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "start_timestamp",
+							"value": "1657562965",
+							"type": "text"
+						},
+						{
+							"key": "end_timestamp",
+							"value": "1657562965",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Consensus",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "Mandatory",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Big Tim",
+							"type": "text"
+						},
+						{
+							"key": "image_url",
+							"value": "https://ipfs.io",
+							"type": "text"
+						},
+						{
+							"key": "qrcode_url",
+							"value": "http://example.com/",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/event/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"event",
+						""
+					],
+					"query": [
+						{
+							"key": "_id",
+							"value": "62cfb3cdaff173355859146b",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get event",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "start_timestamp",
+							"value": "1657562965",
+							"type": "text"
+						},
+						{
+							"key": "end_timestamp",
+							"value": "1657562965",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Consensus",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "Mandatory",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Big Tim",
+							"type": "text"
+						},
+						{
+							"key": "image_url",
+							"value": "https://ipfs.io",
+							"type": "text"
+						},
+						{
+							"key": "qrcode_url",
+							"value": "http://example.com/",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/event/?id=62dcc8b3b8a1f9f14aeb32b1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"event",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "allhands",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "62dcc8b3b8a1f9f14aeb32b1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get event for nft",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "start_timestamp",
+							"value": "1657562965",
+							"type": "text"
+						},
+						{
+							"key": "end_timestamp",
+							"value": "1657562965",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Consensus",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "Mandatory",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Big Tim",
+							"type": "text"
+						},
+						{
+							"key": "image_url",
+							"value": "https://ipfs.io",
+							"type": "text"
+						},
+						{
+							"key": "qrcode_url",
+							"value": "http://example.com/",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/event/nft/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"event",
+						"nft",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "make event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"startTimestamp\": 1657562965,\n    \"endTimestamp\": 1757562965,\n    \"name\": \"Allhands 1\",\n    \"type\": \"allhands\",\n    \"imageUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\",\n    \"qrCodeUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/event/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"event",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "attend event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB6\",\n    \"eventId\": \"62dca54f490c2684aa094255\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/user/attend-event",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"user",
+						"attend-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get attended events",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\": \"0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6\",\n    \"eventId\": \"62cfb3b8aff1733558591464\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/v1/user/events?address=0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"v1",
+						"user",
+						"events"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "0x329CdCBBD82c934fe32322b423bD8fBd30b4EEB6"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

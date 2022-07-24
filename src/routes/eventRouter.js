@@ -1,6 +1,5 @@
 const express = require("express");
 const Event = require("../models/Event");
-const User = require("../models/User");
 
 require("dotenv").config();
 
@@ -8,10 +7,16 @@ const router = express.Router();
 
 // Get specific event object, or many objects
 router.get("/", async function (req, res) {
-  const { _id } = req.query;
-
+  const { id, type } = req.query;
   try {
-    let events = await Event.find(_id ? { _id } : {});
+    let filter = {};
+    if (id) {
+      filter._id = id;
+    }
+    if (type) {
+      filter.type = type;
+    }
+    let events = await Event.find(filter);
     return res.status(200).json(events);
   } catch (err) {
     console.log(err);
@@ -37,7 +42,14 @@ router.post("/", async function (req, res) {
   }
 
   try {
-    let nftId = await Event.countDocuments();
+    let eventNfts = await Event.find().sort({nftId:-1}).limit(1);
+    let nftId = 0;
+
+    if(eventNfts && eventNfts.length > 0) {
+      nftId = eventNfts[0]["nftId"];
+    }
+    nftId = nftId + 1;
+
     let new_event = new Event({
       startTimestamp,
       endTimestamp,

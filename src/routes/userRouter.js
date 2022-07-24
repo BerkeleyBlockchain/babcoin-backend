@@ -17,7 +17,7 @@ router.get("/", async function (req, res) {
   try {
     let filter = {};
     if (id) {
-      filter.id = id;
+      filter._id = id;
     }
     if (address) {
       filter.address = address;
@@ -33,7 +33,6 @@ router.get("/", async function (req, res) {
 
 router.post("/", async function (req, res) {
   const { firstName, lastName, email, address, role } = req.body;
-  console.log(req.body);
 
   if (!firstName || !lastName || !email || !address || !role) {
     return res.status(400).json({
