@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const userRouter = require("./routes/userRouter");
 const eventRouter = require("./routes/eventRouter");
+const qrRouter = require("./routes/qrRouter");
 
 const port = process.env.PORT ? process.env.PORT : 4000;
 console.log(port);

@@ -4,6 +4,7 @@ const Event = require("../models/Event");
 require("dotenv").config();
 
 const router = express.Router();
+const QRCode = require('qrcode');
 
 // Get specific event object, or many objects
 router.get("/", async function (req, res) {
@@ -25,7 +26,7 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async function (req, res) {
-  const { startTimestamp, endTimestamp, name, type, imageUrl, qrCodeUrl } =
+  const { startTimestamp, endTimestamp, name, type, imageUrl } =
     req.body;
 
   if (
@@ -33,8 +34,7 @@ router.post("/", async function (req, res) {
     !endTimestamp ||
     !name ||
     !type ||
-    !imageUrl ||
-    !qrCodeUrl
+    !imageUrl
   ) {
     return res.status(400).json({
       error: "Missing required fields",
@@ -43,24 +43,39 @@ router.post("/", async function (req, res) {
 
   try {
     let eventNfts = await Event.find().sort({nftId:-1}).limit(1);
-    let nftId = 0;
 
+    let nftId = 0;
     if(eventNfts && eventNfts.length > 0) {
       nftId = eventNfts[0]["nftId"];
     }
     nftId = nftId + 1;
 
-    let new_event = new Event({
-      startTimestamp,
-      endTimestamp,
-      name,
-      type,
-      imageUrl,
-      qrCodeUrl,
-      nftId,
-    });
-    await new_event.save();
-    return res.status(200).json(new_event);
+    var opts = {
+      errorCorrectionLevel: 'H',
+      type: 'image/jpeg',
+      quality: 0.3,
+      margin: 1,
+      color: {
+        dark:"#010599FF",
+        light:"#FFBF60FF"
+      }
+    };
+    let data = name + type;
+    QRCode.toDataURL(data, opts, function (err, qrCodeUrl) {
+      if (err) throw err
+      
+      let new_event = new Event({
+        startTimestamp,
+        endTimestamp,
+        name,
+        type,
+        imageUrl,
+        qrCodeUrl,
+        nftId,
+      });
+      new_event.save();
+      return res.status(200).json(new_event);
+    });    
   } catch (err) {
     console.log(err);
     return res.status(400).json(err);
