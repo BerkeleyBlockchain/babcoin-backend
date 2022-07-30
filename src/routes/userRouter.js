@@ -19,7 +19,7 @@ router.get("/", async function (req, res) {
     if (id) {
       filter._id = id;
     }
-    if (address) {
+    if (typeof address !== 'undefined' && address) {
       filter.address = address;
     }
 
@@ -59,6 +59,12 @@ router.post("/", async function (req, res) {
 // Get all event ids a user has been to
 router.get("/events", async function (req, res) {
   const { address } = req.query;
+  if (typeof address === 'undefined' || !address) {
+    return res.status(400).json({
+      error: "Missing required field: address",
+    });
+  }
+
   try {
     let user = UserEvent.findOne({ address });
     if (!user) throw new Error("No record found.");
@@ -74,6 +80,11 @@ router.get("/events", async function (req, res) {
 
 router.post("/attend-event", async function (req, res) {
   const { address, eventId } = req.body;
+  if (typeof address === 'undefined' || !address) {
+    return res.status(400).json({
+      error: "Missing required fields",
+    });
+  }
 
   try {
     let user = User.findOne({ address });
