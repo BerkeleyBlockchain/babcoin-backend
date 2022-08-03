@@ -26,15 +26,13 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async function (req, res) {
-  const { startTimestamp, endTimestamp, name, type, imageUrl } =
-    req.body;
+  const { startTimestamp, endTimestamp, name, type } = req.body;
 
   if (
     !startTimestamp ||
     !endTimestamp ||
     !name ||
-    !type ||
-    !imageUrl
+    !type
   ) {
     return res.status(400).json({
       error: "Missing required fields",
@@ -60,8 +58,9 @@ router.post("/", async function (req, res) {
         light:"#FFBF60FF"
       }
     };
-    let data = name + type;
-    QRCode.toDataURL(data, opts, function (err, qrCodeUrl) {
+    //let imageUrl = "http://localhost:4000/v1/attend-event?name=" + name + "&type=" + type;
+    let imageUrl = "https://babcoin-backend.herokuapp.com/v1/attend-event?name=" + name + "&typpe=" + type;
+    QRCode.toDataURL(imageUrl, opts, function (err, qrCodeSrc) {
       if (err) throw err
       
       let new_event = new Event({
@@ -70,7 +69,7 @@ router.post("/", async function (req, res) {
         name,
         type,
         imageUrl,
-        qrCodeUrl,
+        qrCodeSrc,
         nftId,
       });
       new_event.save();

@@ -39,7 +39,7 @@ const eventsSchema = new Schema({
       }
     },
   },
-  qrCodeUrl: {
+  qrCodeSrc: {
     type: String,
     require: true,
   },
