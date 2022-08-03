@@ -47,7 +47,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "https://babcoin-backend.herokuapp.com/v1/user?address=0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB6",
+					"raw": "https://babcoin-backend.herokuapp.com/v1/user?address=0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB7",
 					"protocol": "https",
 					"host": [
 						"babcoin-backend",
@@ -61,7 +61,12 @@
 					"query": [
 						{
 							"key": "address",
-							"value": "0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB6"
+							"value": "0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB7"
+						},
+						{
+							"key": "id",
+							"value": "62d0f2ea55f8ef16e62aa199",
+							"disabled": true
 						}
 					]
 				}
@@ -69,13 +74,13 @@
 			"response": []
 		},
 		{
-			"name": "make a user",
+			"name": "make user",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"firstName\": \"Lawson2\",\n    \"lastName\": \"Graham\",\n    \"email\": \"test2@test.com\",\n    \"address\": \"0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB6\",\n    \"role\": \"admin\"\n}",
+					"raw": "{\n    \"firstName\": \"Lawson3\",\n    \"lastName\": \"Graham\",\n    \"email\": \"test3@test.com\",\n    \"address\": \"0x349CdCBBD82c934fe32322b423bD8fBd30b4EEB7\",\n    \"role\": \"admin\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -108,46 +113,10 @@
 				"header": [],
 				"body": {
 					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "start_timestamp",
-							"value": "1657562965",
-							"type": "text"
-						},
-						{
-							"key": "end_timestamp",
-							"value": "1657562965",
-							"type": "text"
-						},
-						{
-							"key": "name",
-							"value": "Consensus",
-							"type": "text"
-						},
-						{
-							"key": "type",
-							"value": "Mandatory",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "Big Tim",
-							"type": "text"
-						},
-						{
-							"key": "image_url",
-							"value": "https://ipfs.io",
-							"type": "text"
-						},
-						{
-							"key": "qrcode_url",
-							"value": "http://example.com/",
-							"type": "text"
-						}
-					]
+					"urlencoded": []
 				},
 				"url": {
-					"raw": "https://babcoin-backend.herokuapp.com/v1/event/",
+					"raw": "https://babcoin-backend.herokuapp.com/v1/event/?start_timestamp=1657562965&end_timestamp=1657562965&name=Consensus Fall&type=clubcensus",
 					"protocol": "https",
 					"host": [
 						"babcoin-backend",
@@ -158,6 +127,24 @@
 						"v1",
 						"event",
 						""
+					],
+					"query": [
+						{
+							"key": "start_timestamp",
+							"value": "1657562965"
+						},
+						{
+							"key": "end_timestamp",
+							"value": "1657562965"
+						},
+						{
+							"key": "name",
+							"value": "Consensus Fall"
+						},
+						{
+							"key": "type",
+							"value": "clubcensus"
+						}
 					]
 				}
 			},
@@ -312,7 +299,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"startTimestamp\": 1657562965,\n    \"endTimestamp\": 1757562965,\n    \"name\": \"Clubcensus 2\",\n    \"type\": \"clubcensus\",\n    \"imageUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\",\n    \"qrCodeUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\"\n}",
+					"raw": "{\n    \"startTimestamp\": 1657562965,\n    \"endTimestamp\": 1757562965,\n    \"name\": \"Allhands 1\",\n    \"type\": \"allhands\",\n    \"imageUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\"\n    }",
 					"options": {
 						"raw": {
 							"language": "json"

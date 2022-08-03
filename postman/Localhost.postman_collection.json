@@ -67,7 +67,7 @@
 			"response": []
 		},
 		{
-			"name": "make a user",
+			"name": "make user",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -118,27 +118,12 @@
 						},
 						{
 							"key": "name",
-							"value": "Consensus",
+							"value": "Consensus Fall",
 							"type": "text"
 						},
 						{
 							"key": "type",
-							"value": "Mandatory",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "Big Tim",
-							"type": "text"
-						},
-						{
-							"key": "image_url",
-							"value": "https://ipfs.io",
-							"type": "text"
-						},
-						{
-							"key": "qrcode_url",
-							"value": "http://example.com/",
+							"value": "clubcensus",
 							"type": "text"
 						}
 					]
@@ -313,7 +298,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"startTimestamp\": 1657562965,\n    \"endTimestamp\": 1757562965,\n    \"name\": \"Allhands 1\",\n    \"type\": \"allhands\",\n    \"imageUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\",\n    \"qrCodeUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\"\n}",
+					"raw": "{\n    \"startTimestamp\": 1657562965,\n    \"endTimestamp\": 1757562965,\n    \"name\": \"Allhands 1\",\n    \"type\": \"allhands\",\n    \"imageUrl\": \"https://www.dingmangroup.com/wp-content/uploads/2021/12/no-image.jpg\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
