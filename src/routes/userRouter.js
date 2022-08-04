@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const router = express.Router();
 
-//// 
+////
 // B@B Users API
 ////
 
@@ -19,7 +19,7 @@ router.get("/", async function (req, res) {
     if (id) {
       filter._id = id;
     }
-    if (typeof address !== 'undefined' && address) {
+    if (typeof address !== "undefined" && address) {
       filter.address = address;
     }
 
@@ -59,14 +59,14 @@ router.post("/", async function (req, res) {
 // Get all event ids a user has been to
 router.get("/events", async function (req, res) {
   const { address } = req.query;
-  if (typeof address === 'undefined' || !address) {
+  if (typeof address === "undefined" || !address) {
     return res.status(400).json({
       error: "Missing required field: address",
     });
   }
 
   try {
-    let user = UserEvent.findOne({ address });
+    let user = await UserEvent.findOne({ address });
     if (!user) throw new Error("No record found.");
 
     let events = await UserEvent.find({ user_id: user._id });
@@ -80,18 +80,22 @@ router.get("/events", async function (req, res) {
 
 router.post("/attend-event", async function (req, res) {
   const { address, eventId } = req.body;
-  if (typeof address === 'undefined' || !address) {
+  if (typeof address === "undefined" || !address) {
     return res.status(400).json({
       error: "Missing required fields",
     });
   }
 
   try {
-    let user = User.findOne({ address });
+    let user = await User.findOne({ address: address.toLowerCase() });
+    console.log(user);
     if (!user) throw new Error("No user found.");
 
-    let event = Event.findOne({ _id: eventId });
+    let event = await Event.findOne({ _id: eventId });
     if (!event) throw new Error("No event found.");
+
+    console.log(user);
+    console.log(user._id);
 
     var newUserEvent = new UserEvent({
       userId: user._id,

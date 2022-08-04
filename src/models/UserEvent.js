@@ -8,7 +8,7 @@ const userEventsSchema = new Schema({
   },
   userId: {
     type: String,
-    require: true,
+    required: true,
   },
 });
 
