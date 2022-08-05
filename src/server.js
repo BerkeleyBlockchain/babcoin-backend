@@ -8,11 +8,14 @@ const mongoose = require("mongoose");
 
 const userRouter = require("./routes/userRouter");
 const eventRouter = require("./routes/eventRouter");
+const reqRouter = require("./routes/reqRouter");
 
 const port = process.env.PORT ? process.env.PORT : 4000;
 console.log(port);
 
-const url = process.env.MONGOOSE ? process.env.MONGOOSE : "mongodb://127.0.0.1:27017/babcoin";
+const url = process.env.MONGOOSE
+  ? process.env.MONGOOSE
+  : "mongodb://127.0.0.1:27017/babcoin";
 console.log(url);
 
 mongoose.connect(url, {
@@ -38,6 +41,7 @@ app.use(
 
 app.use("/v1/user/", userRouter);
 app.use("/v1/event/", eventRouter);
+app.use("/v1/requirement/", reqRouter);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
