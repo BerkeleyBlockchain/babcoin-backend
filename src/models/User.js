@@ -5,11 +5,7 @@ const consts = require("../consts");
 var Schema = mongoose.Schema;
 
 const usersSchema = new Schema({
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
+  name: {
     type: String,
     required: true,
   },

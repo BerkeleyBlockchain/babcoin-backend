@@ -2,6 +2,7 @@ const express = require("express");
 const UserEvent = require("../models/UserEvent");
 const User = require("../models/User");
 const Event = require("../models/Event");
+const { eventNames } = require("../models/Requirement");
 
 require("dotenv").config();
 
@@ -32,9 +33,9 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async function (req, res) {
-  const { firstName, lastName, email, address, role } = req.body;
+  const { name, email, address, role } = req.body;
 
-  if (!firstName || !lastName || !email || !address || !role) {
+  if (!eventNames || !email || !address || !role) {
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -42,8 +43,7 @@ router.post("/", async function (req, res) {
 
   try {
     var new_user = new User({
-      firstName,
-      lastName,
+      name,
       email,
       address,
       role,

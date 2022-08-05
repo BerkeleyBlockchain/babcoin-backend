@@ -5,7 +5,6 @@ require("dotenv").config();
 
 const router = express.Router();
 
-// Get specific event object, or many objects
 router.get("/", async function (req, res) {
   const { type } = req.query;
 

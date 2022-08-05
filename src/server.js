@@ -1,5 +1,3 @@
-console.log("Server launched");
-
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -11,12 +9,12 @@ const eventRouter = require("./routes/eventRouter");
 const reqRouter = require("./routes/reqRouter");
 
 const port = process.env.PORT ? process.env.PORT : 4000;
-console.log(port);
+// console.log(port);
 
 const url = process.env.MONGOOSE
   ? process.env.MONGOOSE
   : "mongodb://127.0.0.1:27017/babcoin";
-console.log(url);
+// console.log(url);
 
 mongoose.connect(url, {
   useNewUrlParser: true,

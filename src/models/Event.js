@@ -11,15 +11,15 @@ const eventsSchema = new Schema({
   },
   endTimestamp: {
     type: Number,
-    require: true,
+    required: true,
   },
   name: {
     type: String,
-    require: true,
+    required: true,
   },
   type: {
     type: String,
-    require: true,
+    required: true,
     validate(value) {
       if (!consts.eventTypes.includes(value)) {
         throw new Error("Event type is invalid");
@@ -28,11 +28,10 @@ const eventsSchema = new Schema({
   },
   password: {
     type: String,
-    require: true,
+    required: true,
   },
   imageUrl: {
     type: String,
-    require: true,
     validate(value) {
       if (!validator.isURL(value)) {
         throw new Error("Image URL is invalid");
@@ -41,17 +40,22 @@ const eventsSchema = new Schema({
   },
   qrCodeSrc: {
     type: String,
-    require: true,
   },
   weight: {
     type: Number,
-    require: true,
+    required: true,
     default: 1,
   },
   nftId: {
     type: Number,
-    require: true,
+    required: true,
     unique: true,
+  },
+  description: {
+    type: String,
+  },
+  location: {
+    type: String,
   },
 });
 
