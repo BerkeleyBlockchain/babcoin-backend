@@ -34,9 +34,10 @@ router.post("/", async function (req, res) {
     location,
     description,
     password,
+    nftArtUrl
   } = req.body;
 
-  if (!startTimestamp || !endTimestamp || !name || !type || !password) {
+  if (!startTimestamp || !endTimestamp || !name || !type || !password || !nftArtUrl || !location) {
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -51,6 +52,7 @@ router.post("/", async function (req, res) {
     }
     nftId = nftId + 1;
 
+    let isMinted = false;
     let newEvent = new Event({
       startTimestamp,
       endTimestamp,
@@ -60,6 +62,9 @@ router.post("/", async function (req, res) {
       nftId,
       description,
       location,
+      nftArtUrl,
+      isMinted,
+      location
     });
 
     await newEvent.save();
@@ -165,7 +170,8 @@ router.get("/users", async function (req, res) {
   }
   try {
     let event = await Event.findOne({ nftId: nftId });
- 
+    if (!event) throw new Error("No event found.");
+
     let userEvents = await UserEvent.find({ eventId: event._id });
     let users = [];
     // Get all users that attended that event
