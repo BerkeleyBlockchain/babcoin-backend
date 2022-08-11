@@ -161,7 +161,7 @@ router.post("/nft", async function (req, res) {
 });
 
 router.get("/users", async function (req, res) {
-  const { nftId } = req.body;
+  const { nftId } = req.query;
 
   if (!nftId) {
     return res.status(400).json({
