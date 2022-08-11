@@ -30,6 +30,14 @@ const eventsSchema = new Schema({
     type: String,
     required: true,
   },
+  nftArtUrl: {
+    type: String,
+    validate(value) {
+      if (!validator.isURL(value)) {
+        throw new Error("Image URL is invalid");
+      }
+    },
+  },
   imageUrl: {
     type: String,
     validate(value) {
@@ -56,6 +64,9 @@ const eventsSchema = new Schema({
   },
   location: {
     type: String,
+  },
+  isMinted: {
+    type: Boolean,
   },
 });
 

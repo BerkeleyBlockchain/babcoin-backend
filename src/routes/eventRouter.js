@@ -92,7 +92,91 @@ router.get("/nft/:id", async function (req, res) {
   const { id } = req.params;
   try {
     let event = await Event.findOne({ nftId: id });
-    return res.status(200).json(event);
+
+    // External websites are expecting a particular format
+    let externalEvent = {
+      "description": event.description,
+      "id": event.nftId,
+      "name": event.name,
+      "image": event.nftArtUrl,
+    };
+    return res.status(200).json(externalEvent);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+router.post("/nft", async function (req, res) {
+  const { nftId } = req.body;
+  if (!nftId) {
+    return res.status(400).json({
+      error: "Missing required fields",
+    });
+  }
+
+  try {
+    let event = await Event.findOne({ nftId: nftId });
+
+    // TODO move logic to front end?
+    let now =  Date.now();
+    // Earlier than the start
+    if(now < event.startTimestamp) {
+      let ret = {
+        errorMessage: "Event has yet to start"
+      };
+      return res.status(400).json(ret);
+    }
+    // Earlier than the end
+    if(now < event.endTimestamp) {
+      let ret = {
+        errorMessage: "Event has yet to end"
+      };
+      return res.status(400).json(ret);
+    }
+    // 24 hrs in ms
+    let buffer = 86400000;
+    let expirationTime = event.endTimestamp + buffer;
+    if(now < expirationTime) {
+      let ret = {
+        errorMessage: "Event expiration buffer time has yet to end"
+      };
+      return res.status(400).json(ret);
+    }
+    
+    // Update the minted event
+    event.hasMinted = true;
+    await event.save();
+
+    return res.status(200).json(users);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+router.get("/users", async function (req, res) {
+  const { nftId } = req.body;
+
+  if (!nftId) {
+    return res.status(400).json({
+      error: "Missing required fields",
+    });
+  }
+  try {
+    let event = await Event.findOne({ nftId: nftId });
+ 
+    let userEvents = await UserEvent.find({ eventId: event._id });
+    let users = [];
+    // Get all users that attended that event
+    for (userEvent in userEvents){
+      let user = await User.findOne({ _id: userEvent.userId });
+      if (!user) throw new Error("No user found.");
+      users.append(user);
+    }
+
+    // Event has ended.
+    return res.status(200).json(users);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

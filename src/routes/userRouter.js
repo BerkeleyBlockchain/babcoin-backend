@@ -42,10 +42,11 @@ router.post("/", async function (req, res) {
   }
 
   try {
+    let lowerAddress = address.toLowerCase();
     var new_user = new User({
       name,
       email,
-      address,
+      lowerAddress,
       role,
     });
     await new_user.save();
@@ -66,7 +67,7 @@ router.get("/events", async function (req, res) {
   }
 
   try {
-    let user = await UserEvent.findOne({ address });
+    let user = await User.findOne({ address: address.toLowerCase() });
     if (!user) throw new Error("No record found.");
 
     let events = await UserEvent.find({ user_id: user._id });
@@ -88,7 +89,6 @@ router.post("/attend-event", async function (req, res) {
 
   try {
     let user = await User.findOne({ address: address.toLowerCase() });
-    console.log(user);
     if (!user) throw new Error("No user found.");
 
     let event = await Event.findOne({ _id: eventId });
