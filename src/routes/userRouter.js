@@ -35,7 +35,7 @@ router.get("/", async function (req, res) {
 router.post("/", async function (req, res) {
   const { name, email, address, role } = req.body;
 
-  if (!eventNames || !email || !address || !role) {
+  if (!name || !email || !address || !role) {
     return res.status(400).json({
       error: "Missing required fields",
     });
