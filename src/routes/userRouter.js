@@ -6,6 +6,7 @@ const { eventNames } = require("../models/Requirement");
 const { recoverPersonalSignature } = require("eth-sig-util");
 const { bufferToHex } = require("ethereumjs-util");
 const jwt = require("jsonwebtoken");
+const auth = require("../middleware/auth");
 
 require("dotenv").config();
 
@@ -45,7 +46,6 @@ router.post("/", async function (req, res) {
   }
 
   try {
-    address = address.toLowerCase();
     var new_user = new User({
       name,
       email,
@@ -131,7 +131,7 @@ router.get("/events", async function (req, res) {
   }
 });
 
-router.post("/attend-event", async function (req, res) {
+router.post("/attend-event", auth, async function (req, res) {
   const { address, eventId } = req.body;
   if (typeof address === "undefined" || !address) {
     return res.status(400).json({
