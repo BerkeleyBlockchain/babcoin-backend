@@ -42,11 +42,11 @@ router.post("/", async function (req, res) {
   }
 
   try {
-    let lowerAddress = address.toLowerCase();
+    address = address.toLowerCase();
     var new_user = new User({
       name,
       email,
-      lowerAddress,
+      address,
       role,
     });
     await new_user.save();
