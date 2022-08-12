@@ -3,6 +3,9 @@ const UserEvent = require("../models/UserEvent");
 const User = require("../models/User");
 const Event = require("../models/Event");
 const { eventNames } = require("../models/Requirement");
+const { recoverPersonalSignature } = require("eth-sig-util");
+const { bufferToHex } = require("ethereumjs-util");
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
@@ -21,7 +24,7 @@ router.get("/", async function (req, res) {
       filter._id = id;
     }
     if (typeof address !== "undefined" && address) {
-      filter.address = address;
+      filter.address = address.toLowerCase();
     }
 
     let users = await User.find(filter);
@@ -48,9 +51,58 @@ router.post("/", async function (req, res) {
       email,
       address,
       role,
+      nonce: Math.floor(Math.random() * 1000000),
     });
     await new_user.save();
     return res.status(200).json(new_user);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+router.post("/login", async function (req, res) {
+  const { address, signature } = req.body;
+
+  if (!address || !signature) {
+    return res.status(400).json({
+      error: "Missing required fields",
+    });
+  }
+
+  try {
+    const user = await User.findOne({ address: address.toLowerCase() });
+    if (!user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+
+    const msg = `I am signing my one-time nonce: ${user.nonce}`;
+
+    // We now are in possession of msg, publicAddress and signature. We
+    // can perform an elliptic curve signature verification with ecrecover
+    const msgBufferHex = bufferToHex(Buffer.from(msg, "utf8"));
+    const signedAddress = recoverPersonalSignature({
+      data: msgBufferHex,
+      sig: signature,
+    });
+
+    // The signature verification is successful if the address found with
+    // ecrecover matches the initial publicAddress
+    if (address.toLowerCase() !== signedAddress.toLowerCase()) {
+      return res.status(401).send({ error: "Signature verification failed" });
+    }
+
+    const token = jwt.sign(
+      { _id: user._id.toString(), address },
+      process.env.JWT_SECRET
+    );
+    user.nonce = Math.floor(Math.random() * 10000);
+    user.tokens = user.tokens.concat({ token });
+
+    await user.save();
+    return res.status(200).json({ ...user, token });
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);

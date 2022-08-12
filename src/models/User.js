@@ -4,7 +4,7 @@ const consts = require("../consts");
 
 var Schema = mongoose.Schema;
 
-const usersSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -38,6 +38,38 @@ const usersSchema = new Schema({
       }
     },
   },
+  nonce: {
+    type: Number,
+    required: true,
+  },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
-module.exports = mongoose.model("User", usersSchema);
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.tokens;
+
+  return userObject;
+};
+
+// Enforce lowercase addresses
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  if (user.isModified("address")) {
+    user.address = user.address.toLowerCase();
+  }
+
+  next();
+});
+
+module.exports = mongoose.model("User", userSchema);
