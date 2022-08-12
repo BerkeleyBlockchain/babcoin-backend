@@ -70,7 +70,7 @@ router.get("/events", async function (req, res) {
     let user = await User.findOne({ address: address.toLowerCase() });
     if (!user) throw new Error("No record found.");
 
-    let events = await UserEvent.find({ user_id: user._id });
+    let events = await UserEvent.find({ userId: user._id });
 
     return res.status(200).json(events);
   } catch (err) {
@@ -97,7 +97,7 @@ router.post("/attend-event", async function (req, res) {
     console.log(user);
     console.log(user._id);
 
-    var newUserEvent = new UserEvent({
+    let newUserEvent = new UserEvent({
       userId: user._id,
       eventId,
     });
