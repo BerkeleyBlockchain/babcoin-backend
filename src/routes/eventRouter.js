@@ -150,7 +150,7 @@ router.post("/nft", async function (req, res) {
     }
     
     // Update the minted event
-    event.hasMinted = true;
+    event.isMinted = true;
     await event.save();
 
     return res.status(200).json(users);
