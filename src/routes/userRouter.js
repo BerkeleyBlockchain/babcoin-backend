@@ -120,7 +120,11 @@ router.get("/events", async function (req, res) {
 
   try {
     let user = await User.findOne({ address: address.toLowerCase() });
-    if (!user) throw new Error("No record found.");
+    if (!user) {
+      return res.status(400).json({
+        error: "No User found",
+      });
+    }
 
     let events = await UserEvent.find({ userId: user._id });
 
@@ -141,10 +145,18 @@ router.post("/attend-event", auth, async function (req, res) {
 
   try {
     let user = await User.findOne({ address: address.toLowerCase() });
-    if (!user) throw new Error("No user found.");
+    if (!user) {
+      return res.status(400).json({
+        error: "No User found",
+      });
+    }
 
     let event = await Event.findOne({ _id: eventId });
-    if (!event) throw new Error("No event found.");
+    if (!event) {
+      return res.status(400).json({
+        error: "No Event found",
+      });
+    }
 
     console.log(user);
     console.log(user._id);
