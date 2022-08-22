@@ -128,20 +128,18 @@ router.get("/events", async function (req, res) {
     }
 
     let userEvents = await UserEvent.find({ userId: user._id });
-    
     let events = [];
     // Get all users that attended that event
-    for (userEvent in userEvents){
-      var o_id = new ObjectID(userEvent.eventId);
+    for (let userEvent of userEvents){
+      var o_id = ObjectID(userEvent.eventId);
       let event = await Event.findOne({ _id:  o_id});
       if (!event) {
         return res.status(400).json({
           error: "No Event found",
         });
       }
-      events.append(event);
+      events.push(event);
     }
-
     return res.status(200).json(events);
   } catch (err) {
     console.log(err);

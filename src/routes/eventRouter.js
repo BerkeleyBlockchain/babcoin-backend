@@ -69,7 +69,7 @@ router.post("/", async function (req, res) {
 
     await newEvent.save();
 
-    const imageUrl = `${process.env.FRONTEND}/events/${newEvent._id}/q`;
+    const imageUrl = '${process.env.FRONTEND}/events/${newEvent._id}/q';
 
     var opts = {
       errorCorrectionLevel: "H",
@@ -185,7 +185,7 @@ router.get("/users", async function (req, res) {
           error: "No User found",
         });
       }      
-      users.append(user);
+      users.push(user);
     }
 
     return res.status(200).json(users);

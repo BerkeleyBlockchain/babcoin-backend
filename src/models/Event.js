@@ -34,7 +34,7 @@ const eventsSchema = new Schema({
     type: String,
     validate(value) {
       if (!validator.isURL(value)) {
-        throw new Error("Image URL is invalid");
+        throw new Error("NFT Art URL is invalid");
       }
     },
   },
