@@ -112,7 +112,7 @@ router.post("/login", async function (req, res) {
 
 // Get all event ids a user has been to
 router.get("/events", async function (req, res) {
-  const { address } = req.query;
+  const { address, type } = req.query;
   if (typeof address === "undefined" || !address) {
     return res.status(400).json({
       error: "Missing required field: address",
@@ -138,7 +138,10 @@ router.get("/events", async function (req, res) {
           error: "No Event found",
         });
       }
-      events.push(event);
+      // If type passed into API
+      if(!type || type == event.type) {
+        events.push(event);
+      }
     }
     return res.status(200).json(events);
   } catch (err) {
