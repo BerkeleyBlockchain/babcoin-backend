@@ -1,5 +1,7 @@
 const express = require("express");
 const Event = require("../models/Event");
+const UserEvent = require("../models/UserEvent");
+const User = require("../models/User");
 
 require("dotenv").config();
 
@@ -178,7 +180,7 @@ router.get("/users", async function (req, res) {
     let userEvents = await UserEvent.find({ eventId: event._id });
     let users = [];
     // Get all users that attended that event
-    for (userEvent in userEvents){
+    for (let userEvent of userEvents){
       let user = await User.findOne({ _id: userEvent.userId });
       if (!user) {
         return res.status(400).json({
