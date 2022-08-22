@@ -7,6 +7,7 @@ const { recoverPersonalSignature } = require("eth-sig-util");
 const { bufferToHex } = require("ethereumjs-util");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
+var ObjectID = require('mongodb').ObjectID;
 
 require("dotenv").config();
 
@@ -131,7 +132,8 @@ router.get("/events", async function (req, res) {
     let events = [];
     // Get all users that attended that event
     for (userEvent in userEvents){
-      let event = await Event.findOne({ _id: userEvent.eventId });
+      var o_id = new ObjectID(userEvent.eventId);
+      let event = await Event.findOne({ _id:  o_id});
       if (!event) {
         return res.status(400).json({
           error: "No Event found",
