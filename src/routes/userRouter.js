@@ -46,15 +46,15 @@ router.post("/", async function (req, res) {
   }
 
   try {
-    var new_user = new User({
+    var newUser = new User({
       name,
       email,
       address,
       role,
       nonce: Math.floor(Math.random() * 1000000),
     });
-    await new_user.save();
-    return res.status(200).json(new_user);
+    await newUser.save();
+    return res.status(200).json(newUser);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
@@ -126,7 +126,19 @@ router.get("/events", async function (req, res) {
       });
     }
 
-    let events = await UserEvent.find({ userId: user._id });
+    let userEvents = await UserEvent.find({ userId: user._id });
+    
+    let events = [];
+    // Get all users that attended that event
+    for (userEvent in userEvents){
+      let event = await Event.findOne({ _id: userEvent.eventId });
+      if (!event) {
+        return res.status(400).json({
+          error: "No Event found",
+        });
+      }
+      events.append(event);
+    }
 
     return res.status(200).json(events);
   } catch (err) {
@@ -157,9 +169,6 @@ router.post("/attend-event", auth, async function (req, res) {
         error: "No Event found",
       });
     }
-
-    console.log(user);
-    console.log(user._id);
 
     let newUserEvent = new UserEvent({
       userId: user._id,

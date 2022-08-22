@@ -170,18 +170,24 @@ router.get("/users", async function (req, res) {
   }
   try {
     let event = await Event.findOne({ nftId: nftId });
-    if (!event) throw new Error("No event found.");
-
+    if (!event) {
+      return res.status(400).json({
+        error: "No Event found",
+      });
+    }
     let userEvents = await UserEvent.find({ eventId: event._id });
     let users = [];
     // Get all users that attended that event
     for (userEvent in userEvents){
       let user = await User.findOne({ _id: userEvent.userId });
-      if (!user) throw new Error("No user found.");
+      if (!user) {
+        return res.status(400).json({
+          error: "No User found",
+        });
+      }      
       users.append(user);
     }
 
-    // Event has ended.
     return res.status(200).json(users);
   } catch (err) {
     console.log(err);
