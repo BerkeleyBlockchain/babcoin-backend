@@ -12,4 +12,6 @@ const userEventsSchema = new Schema({
   },
 });
 
+userEventsSchema.index({'eventId': 1, 'userId': 1}, {unique: true});
+
 module.exports = mongoose.model("UserEvent", userEventsSchema);
