@@ -110,6 +110,19 @@ router.post("/login", async function (req, res) {
   }
 });
 
+router.post("/logout", auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    });
+    await req.user.save();
+
+    res.send();
+  } catch (e) {
+    res.status(500).send();
+  }
+});
+
 // Get all event ids a user has been to
 router.get("/events", async function (req, res) {
   const { address, type } = req.query;
