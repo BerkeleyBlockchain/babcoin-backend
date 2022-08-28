@@ -1,12 +1,15 @@
+require("dotenv").config();
 const express = require("express");
+const QRCode = require("qrcode");
+const HDWalletProvider = require("@truffle/hdwallet-provider");
+const Web3 = require("web3");
+
 const Event = require("../models/Event");
 const UserEvent = require("../models/UserEvent");
 const User = require("../models/User");
-
-require("dotenv").config();
+const BabCoinContract = require("../contracts/BabCoinContract.json");
 
 const router = express.Router();
-const QRCode = require("qrcode");
 
 // Get specific event object, or many objects
 router.get("/", async function (req, res) {
@@ -36,10 +39,18 @@ router.post("/", async function (req, res) {
     location,
     description,
     password,
-    nftArtUrl
+    nftArtUrl,
   } = req.body;
 
-  if (!startTimestamp || !endTimestamp || !name || !type || !password || !nftArtUrl || !location) {
+  if (
+    !startTimestamp ||
+    !endTimestamp ||
+    !name ||
+    !type ||
+    !password ||
+    !nftArtUrl ||
+    !location
+  ) {
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -66,12 +77,12 @@ router.post("/", async function (req, res) {
       location,
       nftArtUrl,
       isMinted,
-      location
+      location,
     });
 
     await newEvent.save();
 
-    const imageUrl = '${process.env.FRONTEND}/events/${newEvent._id}/q';
+    const imageUrl = `${process.env.FRONTEND}/events/${newEvent._id}/q`;
 
     var opts = {
       errorCorrectionLevel: "H",
@@ -102,10 +113,10 @@ router.get("/nft/:id", async function (req, res) {
 
     // External websites are expecting a particular format
     let externalEvent = {
-      "description": event.description,
-      "id": event.nftId,
-      "name": event.name,
-      "image": event.nftArtUrl,
+      description: event.description,
+      id: event.nftId,
+      name: event.name,
+      image: event.nftArtUrl,
     };
     return res.status(200).json(externalEvent);
   } catch (err) {
@@ -126,36 +137,70 @@ router.post("/nft", async function (req, res) {
     let event = await Event.findOne({ nftId: nftId });
 
     // TODO move logic to front end?
-    let now =  Date.now();
+    let now = Date.now();
     // Earlier than the start
-    if(now < event.startTimestamp) {
+    if (now < event.startTimestamp) {
       let ret = {
-        errorMessage: "Event has yet to start"
+        errorMessage: "Event has yet to start",
       };
       return res.status(400).json(ret);
     }
     // Earlier than the end
-    if(now < event.endTimestamp) {
+    if (now < event.endTimestamp) {
       let ret = {
-        errorMessage: "Event has yet to end"
+        errorMessage: "Event has yet to end",
       };
       return res.status(400).json(ret);
     }
     // 24 hrs in ms
     let buffer = 86400000;
     let expirationTime = event.endTimestamp + buffer;
-    if(now < expirationTime) {
+    if (now < expirationTime) {
       let ret = {
-        errorMessage: "Event expiration buffer time has yet to end"
+        errorMessage: "Event expiration buffer time has yet to end",
       };
       return res.status(400).json(ret);
     }
-    
-    // Update the minted event
+
+    if (event.isMinted) {
+      return res.status(400).json({ error: "Event has already been minted" });
+    }
+
+    let records = await UserEvent.find({ eventId: event._id });
+    let promises = records.map(async (record) => {
+      let user = await User.findById(record.userId);
+      return user.address;
+    });
+    let users = await Promise.all(promises);
+
+    console.log(users);
+
+    const provider = new HDWalletProvider({
+      privateKeys: [process.env.KEYS],
+      providerOrUrl: process.env.RPC,
+    });
+    const web3 = new Web3(provider);
+    const contract = new web3.eth.Contract(
+      BabCoinContract.abi,
+      process.env.ADDRESS
+    );
+
+    const gasPrice = await web3.eth.getGasPrice();
+    await contract.methods
+      .airdrop(
+        users,
+        nftId,
+        1,
+        0x00000000000000000000000000000000000000000000000000000000000000
+      )
+      .send({ from: process.env.ADMIN_ADDRESS, gasPrice });
+
+    console.log(amount);
     event.isMinted = true;
+
     await event.save();
 
-    return res.status(200).json(users);
+    return res.status(200).json({ success: true });
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
@@ -180,13 +225,13 @@ router.get("/users", async function (req, res) {
     let userEvents = await UserEvent.find({ eventId: event._id });
     let users = [];
     // Get all users that attended that event
-    for (let userEvent of userEvents){
+    for (let userEvent of userEvents) {
       let user = await User.findOne({ _id: userEvent.userId });
       if (!user) {
         return res.status(400).json({
           error: "No User found",
         });
-      }      
+      }
       users.push(user);
     }
 
