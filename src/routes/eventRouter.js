@@ -111,6 +111,10 @@ router.get("/nft/:id", async function (req, res) {
   try {
     let event = await Event.findOne({ nftId: id });
 
+    if (!event) {
+      return res.status(200).json({ description: "", id, name: "", image: "" });
+    }
+
     // External websites are expecting a particular format
     let externalEvent = {
       description: event.description,
