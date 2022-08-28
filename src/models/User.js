@@ -12,12 +12,6 @@ const userSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw new Error("Email is invalid");
-      }
-    },
   },
   address: {
     type: String,

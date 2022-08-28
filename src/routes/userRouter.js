@@ -7,7 +7,7 @@ const { recoverPersonalSignature } = require("eth-sig-util");
 const { bufferToHex } = require("ethereumjs-util");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
-var ObjectID = require('mongodb').ObjectID;
+var ObjectID = require("mongodb").ObjectID;
 
 require("dotenv").config();
 
@@ -143,16 +143,16 @@ router.get("/events", async function (req, res) {
     let userEvents = await UserEvent.find({ userId: user._id });
     let events = [];
     // Get all users that attended that event
-    for (let userEvent of userEvents){
+    for (let userEvent of userEvents) {
       var o_id = ObjectID(userEvent.eventId);
-      let event = await Event.findOne({ _id:  o_id});
+      let event = await Event.findOne({ _id: o_id });
       if (!event) {
         return res.status(400).json({
           error: "No Event found",
         });
       }
       // If type passed into API
-      if(!type || type == event.type) {
+      if (!type || type == event.type) {
         events.push(event);
       }
     }
@@ -163,7 +163,7 @@ router.get("/events", async function (req, res) {
   }
 });
 
-router.post("/attend-event", auth, async function (req, res) {
+router.post("/attend-event", async function (req, res) {
   const { address, eventId } = req.body;
   if (typeof address === "undefined" || !address) {
     return res.status(400).json({
