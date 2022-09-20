@@ -199,7 +199,7 @@ router.post("/nft", async function (req, res) {
       )
       .send({ from: process.env.ADMIN_ADDRESS, gasPrice });
 
-    console.log(amount);
+    // console.log(amount);
     event.isMinted = true;
 
     await event.save();

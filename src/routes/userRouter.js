@@ -38,9 +38,9 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async function (req, res) {
-  var { name, email, address, role } = req.body;
+  var { name, address, role } = req.body;
 
-  if (!name || !email || !address || !role) {
+  if (!name || !address || !role) {
     return res.status(400).json({
       error: "Missing required fields",
     });
@@ -49,7 +49,6 @@ router.post("/", async function (req, res) {
   try {
     var newUser = new User({
       name,
-      email,
       address,
       role,
       nonce: Math.floor(Math.random() * 1000000),
