@@ -32,8 +32,16 @@ router.get("/", async function (req, res) {
 
 router.post("/", async function (req, res) {
   const {
-    startTimestamp,
-    endTimestamp,
+    startYear,
+    endYear,
+    startMonth,
+    endMonth,
+    startDay,
+    endDay,
+    startHour,
+    endHour,
+    startMinute,
+    endMinute,
     name,
     type,
     location,
@@ -42,18 +50,48 @@ router.post("/", async function (req, res) {
     nftArtUrl,
   } = req.body;
 
-  if (
-    !startTimestamp ||
-    !endTimestamp ||
-    !name ||
-    !type ||
-    !password ||
-    !nftArtUrl ||
-    !location
-  ) {
+  let { startTimestamp, endTimestamp } = req.body;
+
+  if (!name || !type || !password || !nftArtUrl || !location) {
     return res.status(400).json({
       error: "Missing required fields",
     });
+  }
+
+  console.log(req.body);
+
+  // if (
+  //   !startTimestamp &&
+  //   (!startYear || !startMonth || !startDay || !startHour || startMinute)
+  // ) {
+  //   return res.status(400).json({
+  //     startTime: "Missing start time",
+  //   });
+  // }
+
+  // if (
+  //   !endTimestamp &&
+  //   (!endYear || !endMonth || !endDay || !endHour || !endMinute)
+  // ) {
+  //   return res.status(400).json({
+  //     startTime: "Missing end time",
+  //   });
+  // }
+
+  if (!startTimestamp) {
+    startTime = new Date(
+      startYear,
+      startMonth - 1,
+      startDay,
+      startHour,
+      startMinute
+    );
+    startTimestamp = startTime.getTime();
+  }
+
+  if (!endTimestamp) {
+    endTime = new Date(endYear, endMonth - 1, endDay, endHour, endMinute);
+    endTimestamp = endTime.getTime();
   }
 
   try {
