@@ -86,12 +86,12 @@ router.post("/", async function (req, res) {
       startHour,
       startMinute
     );
-    startTimestamp = startTime.getTime();
+    startTimestamp = startTime.getTime() + 25200000;
   }
 
   if (!endTimestamp) {
     endTime = new Date(endYear, endMonth - 1, endDay, endHour, endMinute);
-    endTimestamp = endTime.getTime();
+    endTimestamp = endTime.getTime() + 25200000;
   }
 
   try {
