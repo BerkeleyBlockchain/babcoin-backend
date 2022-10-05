@@ -38,7 +38,7 @@ router.get("/", async function (req, res) {
 });
 
 router.post("/", async function (req, res) {
-  var { name, address, role } = req.body;
+  const { name, address, role } = req.body;
 
   if (!name || !address || !role) {
     return res.status(400).json({
@@ -58,6 +58,31 @@ router.post("/", async function (req, res) {
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
+  }
+});
+
+router.get("/scores", async function (req, res) {
+  try {
+    const users = await User.find();
+
+    const eventsArray = await Event.find();
+    const events = {};
+    eventsArray.forEach((event) => (events[event._id] = event));
+
+    const promises = users.map(async (user) => {
+      let attendedEvents = await UserEvent.find({ userId: user._id });
+      let score = 0;
+      attendedEvents.forEach(
+        (record) => (score += events[record.eventId].weight)
+      );
+      return { ...user.toJSON(), score };
+    });
+
+    const results = await Promise.all(promises);
+
+    return res.status(200).json(results);
+  } catch (e) {
+    return res.status(500).json(e);
   }
 });
 
