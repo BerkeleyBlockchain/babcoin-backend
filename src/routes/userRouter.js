@@ -7,6 +7,7 @@ const { recoverPersonalSignature } = require("eth-sig-util");
 const { bufferToHex } = require("ethereumjs-util");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
+const { mergeBatchResults } = require("mongodb/lib/bulk/common");
 var ObjectID = require("mongodb").ObjectID;
 
 require("dotenv").config();
@@ -79,9 +80,11 @@ router.get("/scores", async function (req, res) {
     });
 
     const results = await Promise.all(promises);
+    results.sort((a, b) => b.score - a.score);
 
     return res.status(200).json(results);
   } catch (e) {
+    console.log(e);
     return res.status(500).json(e);
   }
 });
