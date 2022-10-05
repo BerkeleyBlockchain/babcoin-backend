@@ -185,6 +185,12 @@ router.post("/attend-event", async function (req, res) {
       });
     }
 
+    if (event.endTimestamp < Date.now()) {
+      return res.status(400).json({
+        error: "Event has ended",
+      });
+    }
+
     let newUserEvent = new UserEvent({
       userId: user._id,
       eventId,
