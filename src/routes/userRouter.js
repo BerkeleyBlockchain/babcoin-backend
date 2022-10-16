@@ -213,7 +213,7 @@ router.post("/attend-event", async function (req, res) {
       });
     }
 
-    if (event.endTimestamp < Date.now()) {
+    if (event.endTimestamp + 86400000 < Date.now()) {
       return res.status(400).json({
         error: "Event has ended",
       });
