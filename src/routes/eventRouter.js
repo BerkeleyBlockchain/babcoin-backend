@@ -13,7 +13,7 @@ const router = express.Router();
 
 // Get specific event object, or many objects
 router.get("/", async function (req, res) {
-  const { id, type } = req.query;
+  const { id, type, startTime, endTime } = req.query;
   try {
     let filter = {};
     if (id) {
@@ -21,6 +21,12 @@ router.get("/", async function (req, res) {
     }
     if (type) {
       filter.type = type;
+    }
+    if (startTime) {
+      filter.startTimestamp = { $gte: startTime };
+    }
+    if (endTime) {
+      filter.endTimestamp = { $lte: endTime };
     }
     let events = await Event.find(filter);
     return res.status(200).json(events);

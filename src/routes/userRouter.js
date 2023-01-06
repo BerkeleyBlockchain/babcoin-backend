@@ -63,10 +63,20 @@ router.post("/", async function (req, res) {
 });
 
 router.get("/scores", async function (req, res) {
+  const { startTime, endTime } = req.query;
+
   try {
     const users = await User.find();
 
-    const eventsArray = await Event.find();
+    let filter = {};
+    if (startTime) {
+      filter.startTimestamp = { $gte: startTime };
+    }
+    if (endTime) {
+      filter.endTimestamp = { $lte: endTime };
+    }
+
+    const eventsArray = await Event.find(filter);
     const events = {};
     eventsArray.forEach((event) => (events[event._id] = event));
 
@@ -152,7 +162,7 @@ router.post("/logout", auth, async (req, res) => {
 
 // Get all event ids a user has been to
 router.get("/events", async function (req, res) {
-  const { address, type } = req.query;
+  const { address, type, startTime, endTime } = req.query;
   if (typeof address === "undefined" || !address) {
     return res.status(400).json({
       error: "Missing required field: address",
@@ -169,15 +179,23 @@ router.get("/events", async function (req, res) {
 
     let userEvents = await UserEvent.find({ userId: user._id });
     let events = [];
-    // Get all users that attended that event
+
     for (let userEvent of userEvents) {
-      var o_id = ObjectID(userEvent.eventId);
-      let event = await Event.findOne({ _id: o_id });
+      const o_id = ObjectID(userEvent.eventId);
+      const event = await Event.findOne({ _id: o_id });
       if (!event) {
         return res.status(400).json({
           error: "No Event found",
         });
       }
+
+      // Filter out the event id if outside of time bounds
+      if (startTime && event.startTimestamp < startTime) {
+        continue;
+      } else if (endTime && endTime < event.endTimestamp) {
+        continue;
+      }
+
       // If type passed into API
       if (!type || type == event.type) {
         events.push(event);
