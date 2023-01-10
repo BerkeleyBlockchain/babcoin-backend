@@ -84,7 +84,8 @@ router.get("/scores", async function (req, res) {
       let attendedEvents = await UserEvent.find({ userId: user._id });
       let score = 0;
       attendedEvents.forEach(
-        (record) => (score += events[record.eventId].weight)
+        (record) =>
+          (score += events[record.eventId] ? events[record.eventId].weight : 0)
       );
       return { ...user.toJSON(), score };
     });
